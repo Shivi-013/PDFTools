@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Protect PDF — PDF Tools{% endblock %}
+{% block page_title %}Password Protect PDF{% endblock %}
+{% block page_desc %}Encrypt your PDF with a password{% endblock %}
+
+{% block content %}
+<div class="max-w-md space-y-5">
+  <div id="dropZone" class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-10 text-center cursor-pointer hover:border-purple-400 dark:hover:border-purple-500 transition-colors">
+    <input type="file" id="fileInput" accept=".pdf" class="hidden" />
+    <div class="flex flex-col items-center gap-3 pointer-events-none">
+      <div class="w-14 h-14 rounded-2xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <p class="font-semibold text-slate-700 dark:text-slate-200">Drop PDF here</p>
+      <p class="text-sm text-slate-400">or click to browse</p>
+    </div>
+  </div>
+
+  <div id="formCard" class="hidden bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 space-y-4">
+    <p id="fileLabel" class="text-sm text-slate-400 font-medium"></p>
+
+    <div>
+      <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1.5">Password</label>
+      <input id="pwInput" type="password" placeholder="Enter password"
+             class="w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-purple-500" />
+    </div>
+    <div>
+      <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1.5">Confirm Password</label>
+      <input id="pwConfirm" type="password" placeholder="Repeat password"
+             class="w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-purple-500" />
+    </div>
+    <p id="pwError" class="text-xs text-red-400 hidden"></p>
+
+    <button id="protectBtn" class="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      Protect &amp; Download
+    </button>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/protect.js') }}"></script>
+{% endblock %}

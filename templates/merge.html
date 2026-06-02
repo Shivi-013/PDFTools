@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Merge PDFs — PDF Tools{% endblock %}
+{% block page_title %}Merge PDFs{% endblock %}
+{% block page_desc %}Select pages visually, drag to reorder, rotate as needed{% endblock %}
+
+{% block content %}
+<!-- Upload zone -->
+<div id="dropZone"
+     class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-10 mb-6 text-center
+            cursor-pointer hover:border-purple-400 dark:hover:border-purple-500 transition-colors">
+  <input type="file" id="fileInput" multiple accept=".pdf" class="hidden" />
+  <div class="flex flex-col items-center gap-3 pointer-events-none">
+    <div class="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+    </div>
+    <div>
+      <p class="font-semibold text-slate-700 dark:text-slate-200">Drop PDF files here</p>
+      <p class="text-sm text-slate-400 mt-1">or click to browse &nbsp;·&nbsp; Multiple files supported</p>
+    </div>
+  </div>
+</div>
+
+<!-- PDF source panels -->
+<div id="pdfPanels" class="space-y-4 mb-6"></div>
+
+<!-- Merge queue -->
+<div id="queueSection" class="hidden">
+  <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <h3 class="font-bold text-base">Merge Queue</h3>
+        <span id="queueBadge" class="text-xs bg-purple-600 text-white font-bold rounded-full px-2 py-0.5">0</span>
+        <span class="text-xs text-slate-400">· drag to reorder</span>
+      </div>
+      <button id="clearQueueBtn"
+              class="text-xs text-slate-400 hover:text-red-400 transition-colors px-2 py-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
+        Clear all
+      </button>
+    </div>
+
+    <!-- Queue items -->
+    <div id="mergeQueue"
+         class="flex gap-3 overflow-x-auto pb-3 min-h-36 rounded-xl p-2 bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700/50">
+      <div id="queueEmpty" class="flex-1 flex items-center justify-center text-sm text-slate-400 pointer-events-none">
+        Click page thumbnails above to add them here
+      </div>
+    </div>
+
+    <!-- Merge action -->
+    <div class="mt-4 flex flex-wrap items-center gap-4">
+      <button id="mergeBtn"
+              class="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold
+                     px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-purple-900/30">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Merge &amp; Download
+      </button>
+      <p id="mergeInfo" class="text-sm text-slate-400"></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.3/Sortable.min.js"></script>
+<script src="{{ url_for('static', filename='js/merge.js') }}"></script>
+{% endblock %}

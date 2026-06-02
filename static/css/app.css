@@ -1,0 +1,53 @@
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* Thumbnail canvas */
+.thumb-canvas { display: block; width: 100%; height: auto; }
+
+/* Drag ghost */
+.sortable-ghost { opacity: 0.3; }
+.sortable-drag   { opacity: 1 !important; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+
+/* Page chip selected ring */
+.page-selected { outline: 3px solid #a855f7; outline-offset: -3px; }
+
+/* Upload drop-active */
+.drop-active { border-color: #a855f7 !important; background: rgba(168,85,247,0.06); }
+
+/* Spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { animation: spin 0.7s linear infinite; }
+
+/* Progress bar pulse */
+@keyframes bar-pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+.bar-pulse { animation: bar-pulse 1.4s ease-in-out infinite; }
+
+/* Tooltip */
+[data-tip] { position: relative; }
+[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #e2e8f0;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+  z-index: 50;
+  border: 1px solid #334155;
+}
+
+/* Slider */
+input[type=range] { accent-color: #a855f7; }
+
+/* Transitions for dark mode */
+body, aside, header, main, section, div { transition: background-color 0.2s, border-color 0.2s; }

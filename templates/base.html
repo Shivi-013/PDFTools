@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}PDF Tools{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 500: '#a855f7', 600: '#9333ea', 700: '#7e22ce' }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" />
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 flex h-screen overflow-hidden">
+
+  <!-- Mobile overlay -->
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar"
+         class="fixed md:relative z-30 md:z-auto -translate-x-full md:translate-x-0
+                w-56 h-full bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700
+                flex flex-col flex-shrink-0 overflow-y-auto transition-transform duration-200">
+
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2.5 px-4 py-5 border-b border-slate-200 dark:border-slate-700 hover:opacity-80">
+      <div class="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center shadow-lg shadow-purple-900/40">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-4 h-4">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="9" y1="13" x2="15" y2="13"/>
+          <line x1="9" y1="17" x2="15" y2="17"/>
+        </svg>
+      </div>
+      <span class="font-extrabold text-base tracking-tight">PDF<span class="text-purple-500">Tools</span></span>
+    </a>
+
+    <!-- Nav -->
+    <nav class="flex-1 py-3 px-2 space-y-0.5">
+      {% set nav = [
+        ('merge',     '/merge',     'Merge PDFs',   'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'),
+        ('split',     '/split',     'Split PDF',    'M4 6h16M4 12h8m-8 6h16'),
+        ('compress',  '/compress',  'Compress',     'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12'),
+        ('img2pdf',   '/img2pdf',   'Images → PDF', 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'),
+        ('pdf2img',   '/pdf2img',   'PDF → Images', 'M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z'),
+        ('watermark', '/watermark', 'Watermark',    'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z'),
+        ('protect',   '/protect',   'Protect PDF',  'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'),
+        ('metadata',  '/metadata',  'Metadata',     'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'),
+      ] %}
+
+      {% for key, url, label, path in nav %}
+      <a href="{{ url }}"
+         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors
+                {% if active == key %}
+                  bg-purple-100 dark:bg-purple-600/20 text-purple-700 dark:text-purple-400
+                {% else %}
+                  text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-100
+                {% endif %}">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-4 h-4 flex-shrink-0">
+          <path stroke-linecap="round" stroke-linejoin="round" d="{{ path }}"/>
+        </svg>
+        {{ label }}
+      </a>
+      {% endfor %}
+    </nav>
+
+    <!-- Dark mode toggle -->
+    <div class="px-3 py-3 border-t border-slate-200 dark:border-slate-700">
+      <button id="themeToggle"
+              class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <span id="themeLabel">Light Mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="flex-1 flex flex-col overflow-hidden min-w-0">
+
+    <!-- Topbar -->
+    <header class="bg-white dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700 px-4 md:px-6 py-3.5 flex items-center gap-4 flex-shrink-0 backdrop-blur">
+      <button id="menuBtn" class="md:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <div>
+        <h1 class="text-base font-bold leading-tight">{% block page_title %}PDF Tools{% endblock %}</h1>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{% block page_desc %}{% endblock %}</p>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-6">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toastContainer" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 items-center pointer-events-none min-w-72"></div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Watermark PDF — PDF Tools{% endblock %}
+{% block page_title %}Watermark PDF{% endblock %}
+{% block page_desc %}Add a text watermark to every page{% endblock %}
+
+{% block content %}
+<div class="max-w-xl space-y-5">
+  <div id="dropZone" class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-10 text-center cursor-pointer hover:border-purple-400 dark:hover:border-purple-500 transition-colors">
+    <input type="file" id="fileInput" accept=".pdf" class="hidden" />
+    <div class="flex flex-col items-center gap-3 pointer-events-none">
+      <div class="w-14 h-14 rounded-2xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-teal-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+      </div>
+      <p class="font-semibold text-slate-700 dark:text-slate-200">Drop PDF here</p>
+      <p class="text-sm text-slate-400">or click to browse</p>
+    </div>
+  </div>
+
+  <div id="optionsCard" class="hidden bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 space-y-4">
+    <p id="fileLabel" class="text-sm text-slate-400 font-medium"></p>
+
+    <div>
+      <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1.5">Watermark Text</label>
+      <input id="wmText" type="text" value="CONFIDENTIAL"
+             class="w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-purple-500" />
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1.5">Position</label>
+        <select id="wmPos" class="w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-purple-500">
+          <option value="center">Center</option>
+          <option value="topleft">Top Left</option>
+          <option value="topright">Top Right</option>
+          <option value="bottomleft">Bottom Left</option>
+          <option value="bottomright">Bottom Right</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1.5">Font Size: <span id="fontSizeVal">48</span></label>
+        <input id="wmFont" type="range" min="12" max="120" value="48" class="w-full mt-2" />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1.5">Opacity: <span id="opacityVal">30%</span></label>
+        <input id="wmOpacity" type="range" min="5" max="100" value="30" class="w-full mt-2" />
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1.5">Rotation: <span id="rotationVal">45°</span></label>
+        <input id="wmRotation" type="range" min="0" max="360" value="45" class="w-full mt-2" />
+      </div>
+    </div>
+
+    <button id="applyBtn" class="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      </svg>
+      Apply &amp; Download
+    </button>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/watermark.js') }}"></script>
+{% endblock %}
