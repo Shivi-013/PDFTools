@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[**Live Demo**](http://localhost:5000) · [**Report a Bug**](../../issues) · [**Request a Feature**](../../issues)
+[**Live Demo**](https://pdftools-j15n.onrender.com/) · [**Report a Bug**](../../issues) · [**Request a Feature**](../../issues)
 
 </div>
 
@@ -67,9 +67,7 @@ PDFTools is an all-in-one web app for working with PDF files. It runs entirely i
 ## Quick Start
 
 ```bash
-# 1. Clone
-git clone https://github.com/gupta-ananya009/pdftools.git
-cd pdftools
+git clone https://github.com/Shivi-013/PDFTools.git
 
 # 2. Create a virtual environment
 python -m venv venv
@@ -83,7 +81,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Open **http://localhost:5000** — the landing page loads instantly, no configuration needed.
+Open **https://pdftools-j15n.onrender.com/** — the landing page loads instantly, no configuration needed.
 
 ---
 
